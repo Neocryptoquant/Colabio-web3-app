@@ -1,0 +1,54 @@
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/logo"
+
+export function MainNav() {
+  const pathname = usePathname()
+
+  return (
+    <header className="border-b border-emerald-100 bg-white/80 backdrop-blur-sm dark:border-emerald-900 dark:bg-black/50">
+      <div className="container flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-6">
+          <Logo />
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/discover"
+              className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
+                pathname === "/discover" ? "text-emerald-700" : "text-gray-600"
+              }`}
+            >
+              Discover
+            </Link>
+            <Link
+              href="/create"
+              className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
+                pathname === "/create" ? "text-emerald-700" : "text-gray-600"
+              }`}
+            >
+              Create
+            </Link>
+            <Link
+              href="/validate"
+              className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
+                pathname === "/validate" ? "text-emerald-700" : "text-gray-600"
+              }`}
+            >
+              Validate
+            </Link>
+          </nav>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+          <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
+            <Link href="/profile">Profile</Link>
+          </Button>
+        </div>
+      </div>
+    </header>
+  )
+}
