@@ -136,12 +136,16 @@ export function ProjectDetail({ id }: { id: string }) {
   const [showContributionModal, setShowContributionModal] = useState(false)
   const [expandedDescription, setExpandedDescription] = useState(false)
 
+  // Use the id parameter to fetch the project data
+  // For now, we'll just use the sample data
+  const project = projectData
+
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1 >= projectData.images.length ? 0 : prevIndex + 1))
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1 >= project.images.length ? 0 : prevIndex + 1))
   }
 
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 < 0 ? projectData.images.length - 1 : prevIndex - 1))
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 < 0 ? project.images.length - 1 : prevIndex - 1))
   }
 
   const selectImage = (index: number) => {
@@ -175,10 +179,10 @@ export function ProjectDetail({ id }: { id: string }) {
           <div className="lg:col-span-2">
             {/* Hero section */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-emerald-800 mb-2">{projectData.title}</h1>
+              <h1 className="text-3xl font-bold text-emerald-800 mb-2">{project.title}</h1>
               <div className="flex items-center text-gray-600 mb-4">
                 <MapPin className="h-4 w-4 mr-1" />
-                <span>{projectData.location}</span>
+                <span>{project.location}</span>
               </div>
 
               {/* Main image with gallery */}
@@ -186,7 +190,7 @@ export function ProjectDetail({ id }: { id: string }) {
                 <div className="aspect-video relative">
                   <Image
                     src={`/placeholder.svg?height=480&width=854`}
-                    alt={projectData.title}
+                    alt={project.title}
                     fill
                     className="object-cover"
                   />
@@ -213,7 +217,7 @@ export function ProjectDetail({ id }: { id: string }) {
 
               {/* Thumbnail gallery */}
               <div className="flex space-x-2 overflow-x-auto pb-2">
-                {projectData.images.map((image, index) => (
+                {project.images.map((image, index) => (
                   <button
                     key={index}
                     className={`relative h-16 w-24 rounded-md overflow-hidden flex-shrink-0 ${
@@ -245,7 +249,7 @@ export function ProjectDetail({ id }: { id: string }) {
                 <div className="bg-white rounded-lg border border-emerald-100 p-6">
                   <h2 className="text-xl font-bold text-emerald-800 mb-4">Project Description</h2>
                   <div className="text-gray-700 space-y-4">
-                    <p>{projectData.description}</p>
+                    <p>{project.description}</p>
                     <p className={expandedDescription ? "" : "hidden"}>
                       The solar array will consist of 200 high-efficiency photovoltaic panels, capable of generating up
                       to 75 kW of clean electricity. This is enough to power approximately 50 homes in the community,
@@ -280,19 +284,19 @@ export function ProjectDetail({ id }: { id: string }) {
                         <Shield className="h-5 w-5 text-emerald-700 mr-2" />
                         <span className="font-medium text-emerald-800">Overall Risk Score</span>
                       </div>
-                      <div className="text-2xl font-bold text-emerald-700">{projectData.risk.overall}/100</div>
+                      <div className="text-2xl font-bold text-emerald-700">{project.risk.overall}/100</div>
                     </div>
 
                     <div className="space-y-3">
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Technical Risk</span>
-                          <span className="font-medium">{projectData.risk.technical}/100</span>
+                          <span className="font-medium">{project.risk.technical}/100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-emerald-500 h-2 rounded-full"
-                            style={{ width: `${projectData.risk.technical}%` }}
+                            style={{ width: `${project.risk.technical}%` }}
                           ></div>
                         </div>
                       </div>
@@ -300,12 +304,12 @@ export function ProjectDetail({ id }: { id: string }) {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Financial Risk</span>
-                          <span className="font-medium">{projectData.risk.financial}/100</span>
+                          <span className="font-medium">{project.risk.financial}/100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-emerald-500 h-2 rounded-full"
-                            style={{ width: `${projectData.risk.financial}%` }}
+                            style={{ width: `${project.risk.financial}%` }}
                           ></div>
                         </div>
                       </div>
@@ -313,12 +317,12 @@ export function ProjectDetail({ id }: { id: string }) {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Regulatory Risk</span>
-                          <span className="font-medium">{projectData.risk.regulatory}/100</span>
+                          <span className="font-medium">{project.risk.regulatory}/100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-emerald-500 h-2 rounded-full"
-                            style={{ width: `${projectData.risk.regulatory}%` }}
+                            style={{ width: `${project.risk.regulatory}%` }}
                           ></div>
                         </div>
                       </div>
@@ -326,12 +330,12 @@ export function ProjectDetail({ id }: { id: string }) {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Environmental Risk</span>
-                          <span className="font-medium">{projectData.risk.environmental}/100</span>
+                          <span className="font-medium">{project.risk.environmental}/100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-emerald-500 h-2 rounded-full"
-                            style={{ width: `${projectData.risk.environmental}%` }}
+                            style={{ width: `${project.risk.environmental}%` }}
                           ></div>
                         </div>
                       </div>
@@ -345,9 +349,9 @@ export function ProjectDetail({ id }: { id: string }) {
                   <h2 className="text-xl font-bold text-emerald-800 mb-6">Project Timeline</h2>
 
                   <div className="space-y-8">
-                    {projectData.milestones.map((milestone, index) => (
+                    {project.milestones.map((milestone, index) => (
                       <div key={index} className="relative pl-10">
-                        {index < projectData.milestones.length - 1 && (
+                        {index < project.milestones.length - 1 && (
                           <div
                             className={`absolute left-3 top-6 h-full w-0.5 ${
                               milestone.status === "completed"
@@ -375,7 +379,7 @@ export function ProjectDetail({ id }: { id: string }) {
                   <h2 className="text-xl font-bold text-emerald-800 mb-6">Project Team</h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {projectData.team.map((member, index) => (
+                    {project.team.map((member, index) => (
                       <div key={index} className="flex flex-col items-center text-center">
                         <div className="relative h-24 w-24 rounded-full overflow-hidden mb-4">
                           <Image
@@ -404,22 +408,22 @@ export function ProjectDetail({ id }: { id: string }) {
                           <Star
                             key={star}
                             className={`h-5 w-5 ${
-                              star <= Math.floor(projectData.endorsements.rating)
+                              star <= Math.floor(project.endorsements.rating)
                                 ? "text-yellow-400 fill-yellow-400"
-                                : star - 0.5 <= projectData.endorsements.rating
+                                : star - 0.5 <= project.endorsements.rating
                                   ? "text-yellow-400 fill-yellow-400"
                                   : "text-gray-300"
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="ml-2 font-medium">{projectData.endorsements.rating}/5</span>
-                      <span className="ml-1 text-sm text-gray-500">({projectData.endorsements.count} ratings)</span>
+                      <span className="ml-2 font-medium">{project.endorsements.rating}/5</span>
+                      <span className="ml-1 text-sm text-gray-500">({project.endorsements.count} ratings)</span>
                     </div>
                   </div>
 
                   <div className="space-y-6">
-                    {projectData.endorsements.testimonials.map((testimonial, index) => (
+                    {project.endorsements.testimonials.map((testimonial, index) => (
                       <div key={index} className="bg-emerald-50 rounded-lg p-4">
                         <div className="flex items-center mb-2">
                           <div className="flex">
@@ -452,18 +456,18 @@ export function ProjectDetail({ id }: { id: string }) {
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Progress</span>
-                        <span className="font-medium">{projectData.progress}%</span>
+                        <span className="font-medium">{project.progress}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
                         <div
                           className="bg-emerald-500 h-2 rounded-full"
-                          style={{ width: `${projectData.progress}%` }}
+                          style={{ width: `${project.progress}%` }}
                         ></div>
                       </div>
 
                       <div className="flex justify-between mb-1">
-                        <span className="text-2xl font-bold text-emerald-700">{projectData.raised} SOL</span>
-                        <span className="text-gray-500">of {projectData.goal} SOL</span>
+                        <span className="text-2xl font-bold text-emerald-700">{project.raised} SOL</span>
+                        <span className="text-gray-500">of {project.goal} SOL</span>
                       </div>
                     </div>
 
@@ -471,7 +475,7 @@ export function ProjectDetail({ id }: { id: string }) {
                       <div className="flex items-center">
                         <Users className="h-5 w-5 text-emerald-600 mr-2" />
                         <div>
-                          <div className="font-medium">{projectData.backers}</div>
+                          <div className="font-medium">{project.backers}</div>
                           <div className="text-xs text-gray-500">Backers</div>
                         </div>
                       </div>
@@ -479,7 +483,7 @@ export function ProjectDetail({ id }: { id: string }) {
                       <div className="flex items-center">
                         <Clock className="h-5 w-5 text-emerald-600 mr-2" />
                         <div>
-                          <div className="font-medium">{projectData.daysRemaining}</div>
+                          <div className="font-medium">{project.daysRemaining}</div>
                           <div className="text-xs text-gray-500">Days left</div>
                         </div>
                       </div>
@@ -501,7 +505,7 @@ export function ProjectDetail({ id }: { id: string }) {
                   <h3 className="font-medium text-emerald-800 mb-4">Similar Projects</h3>
 
                   <div className="space-y-4">
-                    {projectData.relatedProjects.map((project) => (
+                    {project.relatedProjects.map((project) => (
                       <Link href={`/projects/${project.id}`} key={project.id}>
                         <div className="flex items-center gap-3 group">
                           <div className="relative h-16 w-16 rounded-md overflow-hidden flex-shrink-0">
@@ -537,9 +541,7 @@ export function ProjectDetail({ id }: { id: string }) {
         </div>
       </main>
 
-      {showContributionModal && (
-        <ContributionModal project={projectData} onClose={() => setShowContributionModal(false)} />
-      )}
+      {showContributionModal && <ContributionModal project={project} onClose={() => setShowContributionModal(false)} />}
     </div>
   )
 }

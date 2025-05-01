@@ -12,170 +12,111 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MainNav } from "@/components/main-nav"
+import { LoadingSpinner } from "@/components/loading-states"
+
+// Sample data for projects
+const sampleProjects = [
+  {
+    id: "1",
+    title: "Community Solar Array",
+    description: "Solar power installation for a rural community center",
+    location: "Greenville, CA",
+    image: "/project-solar.jpg",
+    progress: 65,
+    goal: 500,
+    raised: 325,
+    risk: "low",
+  },
+  {
+    id: "2",
+    title: "Wind Farm Expansion",
+    description: "Adding 5 new turbines to existing wind farm",
+    location: "Windhaven, OR",
+    image: "/project-wind.jpg",
+    progress: 42,
+    goal: 800,
+    raised: 336,
+    risk: "medium",
+  },
+  {
+    id: "3",
+    title: "Micro Hydro Power",
+    description: "Small-scale hydro power for mountain community",
+    location: "Riverdale, WA",
+    image: "/project-hydro.jpg",
+    progress: 78,
+    goal: 300,
+    raised: 234,
+    risk: "low",
+  },
+  {
+    id: "4",
+    title: "Biomass Conversion Plant",
+    description: "Converting agricultural waste to clean energy",
+    location: "Farmington, ID",
+    image: "/project-biomass.jpg",
+    progress: 25,
+    goal: 1200,
+    raised: 300,
+    risk: "high",
+  },
+  {
+    id: "5",
+    title: "School Solar Rooftop",
+    description: "Solar panels for local elementary school",
+    location: "Sunnydale, AZ",
+    image: "/project-school.jpg",
+    progress: 90,
+    goal: 200,
+    raised: 180,
+    risk: "low",
+  },
+  {
+    id: "6",
+    title: "Geothermal Heating Network",
+    description: "Community geothermal heating system",
+    location: "Hotsprings, NV",
+    image: "/project-geothermal.jpg",
+    progress: 35,
+    goal: 750,
+    raised: 262.5,
+    risk: "medium",
+  },
+]
 
 export function ProjectDiscovery() {
   const [showFilters, setShowFilters] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
-  const [featuredProjects, setFeaturedProjects] = useState([])
-  const [allProjects, setAllProjects] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [featuredProjects, setFeaturedProjects] = useState(sampleProjects.slice(0, 4))
+  const [allProjects, setAllProjects] = useState(sampleProjects)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Add this useEffect to fetch projects
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setIsLoading(true)
-        // For now, use sample data until API is fully implemented
-        setFeaturedProjects([
-          {
-            id: "1",
-            title: "Community Solar Array",
-            description: "Solar power installation for a rural community center",
-            location: "Greenville, CA",
-            image: "/project-solar.jpg",
-            progress: 65,
-            goal: 500,
-            raised: 325,
-            risk: "low",
-          },
-          {
-            id: "2",
-            title: "Wind Farm Expansion",
-            description: "Adding 5 new turbines to existing wind farm",
-            location: "Windhaven, OR",
-            image: "/project-wind.jpg",
-            progress: 42,
-            goal: 800,
-            raised: 336,
-            risk: "medium",
-          },
-          {
-            id: "3",
-            title: "Micro Hydro Power",
-            description: "Small-scale hydro power for mountain community",
-            location: "Riverdale, WA",
-            image: "/project-hydro.jpg",
-            progress: 78,
-            goal: 300,
-            raised: 234,
-            risk: "low",
-          },
-          {
-            id: "4",
-            title: "Biomass Conversion Plant",
-            description: "Converting agricultural waste to clean energy",
-            location: "Farmington, ID",
-            image: "/project-biomass.jpg",
-            progress: 25,
-            goal: 1200,
-            raised: 300,
-            risk: "high",
-          },
-        ])
+        setError(null)
 
-        setAllProjects([
-          {
-            id: "1",
-            title: "Community Solar Array",
-            description: "Solar power installation for a rural community center",
-            location: "Greenville, CA",
-            image: "/project-solar.jpg",
-            progress: 65,
-            goal: 500,
-            raised: 325,
-            risk: "low",
-          },
-          {
-            id: "2",
-            title: "Wind Farm Expansion",
-            description: "Adding 5 new turbines to existing wind farm",
-            location: "Windhaven, OR",
-            image: "/project-wind.jpg",
-            progress: 42,
-            goal: 800,
-            raised: 336,
-            risk: "medium",
-          },
-          {
-            id: "3",
-            title: "Micro Hydro Power",
-            description: "Small-scale hydro power for mountain community",
-            location: "Riverdale, WA",
-            image: "/project-hydro.jpg",
-            progress: 78,
-            goal: 300,
-            raised: 234,
-            risk: "low",
-          },
-          {
-            id: "4",
-            title: "Biomass Conversion Plant",
-            description: "Converting agricultural waste to clean energy",
-            location: "Farmington, ID",
-            image: "/project-biomass.jpg",
-            progress: 25,
-            goal: 1200,
-            raised: 300,
-            risk: "high",
-          },
-          {
-            id: "5",
-            title: "School Solar Rooftop",
-            description: "Solar panels for local elementary school",
-            location: "Sunnydale, AZ",
-            image: "/project-school.jpg",
-            progress: 90,
-            goal: 200,
-            raised: 180,
-            risk: "low",
-          },
-          {
-            id: "6",
-            title: "Geothermal Heating Network",
-            description: "Community geothermal heating system",
-            location: "Hotsprings, NV",
-            image: "/project-geothermal.jpg",
-            progress: 35,
-            goal: 750,
-            raised: 262.5,
-            risk: "medium",
-          },
-          {
-            id: "7",
-            title: "Tidal Energy Prototype",
-            description: "Testing new tidal energy technology",
-            location: "Bayshore, ME",
-            image: "/project-tidal.jpg",
-            progress: 15,
-            goal: 1500,
-            raised: 225,
-            risk: "high",
-          },
-          {
-            id: "8",
-            title: "Community Battery Storage",
-            description: "Shared battery storage for solar neighborhood",
-            location: "Powertown, TX",
-            image: "/project-battery.jpg",
-            progress: 50,
-            goal: 600,
-            raised: 300,
-            risk: "medium",
-          },
-          {
-            id: "9",
-            title: "Vertical Wind Turbines",
-            description: "Urban wind turbines for city center",
-            location: "Metropolis, NY",
-            image: "/project-vertical.jpg",
-            progress: 30,
-            goal: 400,
-            raised: 120,
-            risk: "medium",
-          },
-        ])
+        // Use sample data for now
+        setFeaturedProjects(sampleProjects.slice(0, 4))
+        setAllProjects(sampleProjects)
+
+        // Uncomment this when API is ready
+        /*
+        const response = await fetch('/api/projects')
+        if (response.ok) {
+          const data = await response.json()
+          setFeaturedProjects(data.projects.slice(0, 4))
+          setAllProjects(data.projects)
+        } else {
+          throw new Error('Failed to fetch projects')
+        }
+        */
       } catch (error) {
         console.error("Error fetching projects:", error)
+        setError("Failed to load projects. Please try again later.")
       } finally {
         setIsLoading(false)
       }
@@ -203,6 +144,24 @@ export function ProjectDiscovery() {
       default:
         return "bg-gray-100 text-gray-800"
     }
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50 flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()} className="bg-emerald-600 hover:bg-emerald-700">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (
