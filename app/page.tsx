@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { WalletMultiButton } from "@/components/wallet-multi-button"
 
@@ -28,20 +27,14 @@ export default function LoginPage() {
                 <span className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Other options</span>
+                <span className="bg-white px-2 text-gray-500">About Colabio</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="border-emerald-200 hover:bg-emerald-50">
-                <Image src="/solflare-logo.svg" alt="Solflare" width={20} height={20} className="mr-2" />
-                Solflare
-              </Button>
-              <Button variant="outline" className="border-emerald-200 hover:bg-emerald-50">
-                <Image src="/backpack-logo.svg" alt="Backpack" width={20} height={20} className="mr-2" />
-                Backpack
-              </Button>
-            </div>
+            <p className="text-sm text-gray-600 text-center">
+              Colabio is a decentralized platform for crowdfunding green energy projects on the Solana blockchain.
+              Connect your wallet to start funding or creating sustainable energy initiatives.
+            </p>
           </CardContent>
         </Card>
       </div>

@@ -2,11 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 
 export function MainNav() {
   const pathname = usePathname()
+  const { connected } = useWallet()
 
   return (
     <header className="border-b border-emerald-100 bg-white/80 backdrop-blur-sm dark:border-emerald-900 dark:bg-black/50">
@@ -41,12 +43,22 @@ export function MainNav() {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
-          <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
-            <Link href="/profile">Profile</Link>
-          </Button>
+          {connected ? (
+            <>
+              <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-gray-600 hover:text-emerald-600">
+                <Link href="/profile">Profile</Link>
+              </Button>
+            </>
+          ) : (
+            <div className="hidden md:block">
+              <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
+                <Link href="/">Connect Wallet</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </header>

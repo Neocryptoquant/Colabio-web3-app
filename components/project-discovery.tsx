@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Search, Filter, ChevronLeft, ChevronRight, MapPin } from "lucide-react"
@@ -13,117 +13,151 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MainNav } from "@/components/main-nav"
 
+// Replace the sample data with state variables
+// const featuredProjects = [...]
+// const allProjects = [...]
+
+// Add these state variables after the existing useState calls
+const [featuredProjects, setFeaturedProjects] = useState([])
+const [allProjects, setAllProjects] = useState([])
+const [isLoading, setIsLoading] = useState(true)
+const [showFilters, setShowFilters] = useState(false) // Move here to avoid conditional hook call
+const [carouselIndex, setCarouselIndex] = useState(0)
+
 // Sample data for featured projects
-const featuredProjects = [
-  {
-    id: "1",
-    title: "Community Solar Array",
-    description: "Solar power installation for a rural community center",
-    location: "Greenville, CA",
-    image: "/project-solar.jpg",
-    progress: 65,
-    goal: 500,
-    raised: 325,
-    risk: "low",
-  },
-  {
-    id: "2",
-    title: "Wind Farm Expansion",
-    description: "Adding 5 new turbines to existing wind farm",
-    location: "Windhaven, OR",
-    image: "/project-wind.jpg",
-    progress: 42,
-    goal: 800,
-    raised: 336,
-    risk: "medium",
-  },
-  {
-    id: "3",
-    title: "Micro Hydro Power",
-    description: "Small-scale hydro power for mountain community",
-    location: "Riverdale, WA",
-    image: "/project-hydro.jpg",
-    progress: 78,
-    goal: 300,
-    raised: 234,
-    risk: "low",
-  },
-  {
-    id: "4",
-    title: "Biomass Conversion Plant",
-    description: "Converting agricultural waste to clean energy",
-    location: "Farmington, ID",
-    image: "/project-biomass.jpg",
-    progress: 25,
-    goal: 1200,
-    raised: 300,
-    risk: "high",
-  },
-]
+// const featuredProjects = [
+//   {
+//     id: "1",
+//     title: "Community Solar Array",
+//     description: "Solar power installation for a rural community center",
+//     location: "Greenville, CA",
+//     image: "/project-solar.jpg",
+//     progress: 65,
+//     goal: 500,
+//     raised: 325,
+//     risk: "low",
+//   },
+//   {
+//     id: "2",
+//     title: "Wind Farm Expansion",
+//     description: "Adding 5 new turbines to existing wind farm",
+//     location: "Windhaven, OR",
+//     image: "/project-wind.jpg",
+//     progress: 42,
+//     goal: 800,
+//     raised: 336,
+//     risk: "medium",
+//   },
+//   {
+//     id: "3",
+//     title: "Micro Hydro Power",
+//     description: "Small-scale hydro power for mountain community",
+//     location: "Riverdale, WA",
+//     image: "/project-hydro.jpg",
+//     progress: 78,
+//     goal: 300,
+//     raised: 234,
+//     risk: "low",
+//   },
+//   {
+//     id: "4",
+//     title: "Biomass Conversion Plant",
+//     description: "Converting agricultural waste to clean energy",
+//     location: "Farmington, ID",
+//     image: "/project-biomass.jpg",
+//     progress: 25,
+//     goal: 1200,
+//     raised: 300,
+//     risk: "high",
+//   },
+// ]
 
 // Sample data for all projects
-const allProjects = [
-  ...featuredProjects,
-  {
-    id: "5",
-    title: "School Solar Rooftop",
-    description: "Solar panels for local elementary school",
-    location: "Sunnydale, AZ",
-    image: "/project-school.jpg",
-    progress: 90,
-    goal: 200,
-    raised: 180,
-    risk: "low",
-  },
-  {
-    id: "6",
-    title: "Geothermal Heating Network",
-    description: "Community geothermal heating system",
-    location: "Hotsprings, NV",
-    image: "/project-geothermal.jpg",
-    progress: 35,
-    goal: 750,
-    raised: 262.5,
-    risk: "medium",
-  },
-  {
-    id: "7",
-    title: "Tidal Energy Prototype",
-    description: "Testing new tidal energy technology",
-    location: "Bayshore, ME",
-    image: "/project-tidal.jpg",
-    progress: 15,
-    goal: 1500,
-    raised: 225,
-    risk: "high",
-  },
-  {
-    id: "8",
-    title: "Community Battery Storage",
-    description: "Shared battery storage for solar neighborhood",
-    location: "Powertown, TX",
-    image: "/project-battery.jpg",
-    progress: 50,
-    goal: 600,
-    raised: 300,
-    risk: "medium",
-  },
-  {
-    id: "9",
-    title: "Vertical Wind Turbines",
-    description: "Urban wind turbines for city center",
-    location: "Metropolis, NY",
-    image: "/project-vertical.jpg",
-    progress: 30,
-    goal: 400,
-    raised: 120,
-    risk: "medium",
-  },
-]
+// const allProjects = [
+//   ...featuredProjects,
+//   {
+//     id: "5",
+//     title: "School Solar Rooftop",
+//     description: "Solar panels for local elementary school",
+//     location: "Sunnydale, AZ",
+//     image: "/project-school.jpg",
+//     progress: 90,
+//     goal: 200,
+//     raised: 180,
+//     risk: "low",
+//   },
+//   {
+//     id: "6",
+//     title: "Geothermal Heating Network",
+//     description: "Community geothermal heating system",
+//     location: "Hotsprings, NV",
+//     image: "/project-geothermal.jpg",
+//     progress: 35,
+//     goal: 750,
+//     raised: 262.5,
+//     risk: "medium",
+//   },
+//   {
+//     id: "7",
+//     title: "Tidal Energy Prototype",
+//     description: "Testing new tidal energy technology",
+//     location: "Bayshore, ME",
+//     image: "/project-tidal.jpg",
+//     progress: 15,
+//     goal: 1500,
+//     raised: 225,
+//     risk: "high",
+//   },
+//   {
+//     id: "8",
+//     title: "Community Battery Storage",
+//     description: "Shared battery storage for solar neighborhood",
+//     location: "Powertown, TX",
+//     image: "/project-battery.jpg",
+//     progress: 50,
+//     goal: 600,
+//     raised: 300,
+//     risk: "medium",
+//   },
+//   {
+//     id: "9",
+//     title: "Vertical Wind Turbines",
+//     description: "Urban wind turbines for city center",
+//     location: "Metropolis, NY",
+//     image: "/project-vertical.jpg",
+//     progress: 30,
+//     goal: 400,
+//     raised: 120,
+//     risk: "medium",
+//   },
+// ]
 
 export function ProjectDiscovery() {
-  const [showFilters, setShowFilters] = useState(false)
-  const [carouselIndex, setCarouselIndex] = useState(0)
+  // Add this useEffect to fetch projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch("/api/projects")
+        if (response.ok) {
+          const data = await response.json()
+
+          // Filter active projects for featured
+          const active = data.projects.filter((p) => p.status === "active")
+          setFeaturedProjects(active.slice(0, 4))
+
+          // All projects
+          setAllProjects(data.projects)
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
 
   const nextSlide = () => {
     setCarouselIndex((prevIndex) => (prevIndex + 1 >= featuredProjects.length - 2 ? 0 : prevIndex + 1))

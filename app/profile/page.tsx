@@ -1,48 +1,134 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useConnection } from "@solana/wallet-adapter-react"
+import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { CopyIcon, CheckIcon } from "lucide-react"
+import { CopyIcon, CheckIcon, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useUser } from "@/hooks/use-supabase"
 
 export default function ProfilePage() {
+  const { publicKey, wallet, connected, disconnect } = useWallet()
+  const { connection } = useConnection()
+  const { user, loading: userLoading } = useUser()
   const [copied, setCopied] = useState(false)
-  const walletAddress = "8xzt7aqNFZ7x5uN9jfVkKArYr9YNEaQfqNusPGXyhtNf"
-  const shortAddress = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`
+  const [balance, setBalance] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [contributions, setContributions] = useState<any[]>([])
+  const router = useRouter()
+
+  // Redirect to login if not connected
+  useEffect(() => {
+    if (!connected && !loading) {
+      router.push("/")
+    }
+  }, [connected, loading, router])
+
+  // Fetch wallet balance
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (publicKey && connection) {
+        try {
+          const walletBalance = await connection.getBalance(publicKey)
+          setBalance(walletBalance / LAMPORTS_PER_SOL)
+        } catch (error) {
+          console.error("Failed to fetch balance:", error)
+          setBalance(0)
+        }
+      }
+      setLoading(false)
+    }
+
+    fetchBalance()
+
+    // Set up balance refresh interval
+    const intervalId = setInterval(fetchBalance, 30000) // Refresh every 30 seconds
+
+    return () => clearInterval(intervalId)
+  }, [publicKey, connection])
+
+  // Fetch user contributions
+  useEffect(() => {
+    const fetchContributions = async () => {
+      if (user) {
+        try {
+          const response = await fetch(`/api/users/${user.id}/contributions`)
+          if (response.ok) {
+            const data = await response.json()
+            setContributions(data.contributions || [])
+          }
+        } catch (error) {
+          console.error("Failed to fetch contributions:", error)
+        }
+      }
+    }
+
+    if (user) {
+      fetchContributions()
+    }
+  }, [user])
+
+  const walletAddress = publicKey?.toBase58() || ""
+  const shortAddress = walletAddress ? `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}` : ""
 
   const copyAddress = () => {
-    navigator.clipboard.writeText(walletAddress)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    if (walletAddress) {
+      navigator.clipboard.writeText(walletAddress)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
-  const contributionHistory = [
-    {
-      id: 1,
-      project: "Community Solar Array",
-      amount: "5.2 SOL",
-      date: "May 15, 2023",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      project: "Wind Farm Expansion",
-      amount: "3.7 SOL",
-      date: "April 2, 2023",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      project: "Hydro Power Initiative",
-      amount: "8.1 SOL",
-      date: "March 10, 2023",
-      status: "Completed",
-    },
-  ]
+  const getWalletName = () => {
+    if (!wallet) return "Unknown Wallet"
+    return wallet.adapter.name
+  }
+
+  // Use fetched contributions or fallback to sample data
+  const contributionHistory =
+    contributions.length > 0
+      ? contributions
+      : [
+          {
+            id: 1,
+            project: "Community Solar Array",
+            amount: "5.2 SOL",
+            date: "May 15, 2023",
+            status: "Completed",
+          },
+          {
+            id: 2,
+            project: "Wind Farm Expansion",
+            amount: "3.7 SOL",
+            date: "April 2, 2023",
+            status: "Completed",
+          },
+          {
+            id: 3,
+            project: "Hydro Power Initiative",
+            amount: "8.1 SOL",
+            date: "March 10, 2023",
+            status: "Completed",
+          },
+        ]
+
+  if (loading || userLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-8 w-8 text-emerald-600 animate-spin mb-4" />
+          <p className="text-emerald-800">Loading wallet information...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
@@ -52,7 +138,7 @@ export default function ProfilePage() {
             <Image src="/colabio-logo.svg" alt="Colabio Logo" width={48} height={48} className="mr-3" />
             <h1 className="text-2xl font-bold text-emerald-700">Colabio</h1>
           </div>
-          <Button variant="outline" className="border-emerald-200">
+          <Button variant="outline" className="border-emerald-200" onClick={() => disconnect()}>
             Disconnect
           </Button>
         </div>
@@ -71,10 +157,20 @@ export default function ProfilePage() {
                 </Button>
               </div>
               <div className="mt-4">
-                <p className="text-sm text-gray-500">Connected with Phantom</p>
+                <p className="text-sm text-gray-500">Connected with {getWalletName()}</p>
                 <div className="mt-4 pt-4 border-t">
-                  <p className="text-sm font-medium">Total Contributed</p>
-                  <p className="text-2xl font-bold text-emerald-700">17.0 SOL</p>
+                  <p className="text-sm font-medium">Wallet Balance</p>
+                  <p className="text-2xl font-bold text-emerald-700">
+                    {balance !== null ? balance.toFixed(4) : "0"} SOL
+                  </p>
+                </div>
+                <div className="mt-4 pt-4 border-t">
+                  <p className="text-sm font-medium">Username</p>
+                  <p className="text-lg font-medium text-emerald-700">{user?.username || "Not set"}</p>
+                </div>
+                <div className="mt-4 pt-4 border-t">
+                  <p className="text-sm font-medium">Reputation</p>
+                  <p className="text-lg font-medium text-emerald-700">{user?.reputation || 0}</p>
                 </div>
               </div>
             </CardContent>
