@@ -1,8 +1,10 @@
 import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { WalletMultiButton } from "@/components/wallet-multi-button"
 
-export default function LoginPage() {
+export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-50">
       <div className="w-full max-w-md px-4">
@@ -35,6 +37,12 @@ export default function LoginPage() {
               Colabio is a decentralized platform for crowdfunding green energy projects on the Solana blockchain.
               Connect your wallet to start funding or creating sustainable energy initiatives.
             </p>
+
+            <div className="pt-4 flex flex-col gap-2">
+              <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
+                <Link href="/discover">Browse Projects</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

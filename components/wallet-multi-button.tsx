@@ -16,8 +16,13 @@ export function WalletMultiButton() {
 
   // Handle wallet connection
   const handleConnect = async () => {
-    setIsConnecting(true)
-    setVisible(true)
+    try {
+      setIsConnecting(true)
+      setVisible(true)
+    } catch (error) {
+      console.error("Error connecting wallet:", error)
+      setIsConnecting(false)
+    }
   }
 
   // Redirect to profile page when connected

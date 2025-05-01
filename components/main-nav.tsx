@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
+import { WalletMultiButton } from "@/components/wallet-multi-button"
 
 export function MainNav() {
   const pathname = usePathname()
@@ -54,9 +55,7 @@ export function MainNav() {
             </>
           ) : (
             <div className="hidden md:block">
-              <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
-                <Link href="/">Connect Wallet</Link>
-              </Button>
+              <WalletMultiButton />
             </div>
           )}
         </div>
