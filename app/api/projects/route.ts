@@ -1,23 +1,28 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getProjects, createProject } from "@/lib/services/project-service"
+import { createProject } from "@/lib/services/project-service"
 import { getUserByWalletAddress } from "@/lib/services/user-service"
 
 export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams
-    const status = searchParams.get("status") || undefined
-    const technology = searchParams.get("technology") || undefined
+  // This is a placeholder that returns static data
+  // In a real implementation, this would fetch from Supabase
+  const projects = [
+    {
+      id: "1",
+      title: "Community Solar Array",
+      description: "Solar power installation for a rural community center",
+      location: "Greenville, CA",
+      image: "/project-solar.jpg",
+      progress: 65,
+      goal: 500,
+      raised: 325,
+      risk: "low",
+      technology_type: "solar",
+      status: "active",
+    },
+    // Add more sample projects here
+  ]
 
-    const projects = await getProjects({
-      status: status as string | undefined,
-      technology_type: technology as string | undefined,
-    })
-
-    return NextResponse.json({ projects })
-  } catch (error) {
-    console.error("Error fetching projects:", error)
-    return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 })
-  }
+  return NextResponse.json({ projects })
 }
 
 export async function POST(request: NextRequest) {

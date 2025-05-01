@@ -61,10 +61,10 @@
     "@solana/web3.js": "latest",
     "@solana/wallet-adapter-react": "latest",
     "bn.js": "latest",
-    "@supabase/supabase-js": "latest",
     "@solana/wallet-adapter-base": "latest",
     "@solana/wallet-adapter-react-ui": "latest",
-    "@solana/wallet-adapter-wallets": "latest"
+    "@solana/wallet-adapter-wallets": "latest",
+    "@supabase/supabase-js": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
