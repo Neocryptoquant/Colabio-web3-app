@@ -2,11 +2,10 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useTheme } from "next-themes"
 
 export function Logo() {
-  const { resolvedTheme } = useTheme()
-  const logoSrc = resolvedTheme === "dark" ? "/colabio-logo-dark.png" : "/colabio-logo-light.png"
+  // Always use the light theme logo
+  const logoSrc = "/colabio-logo-light.png"
 
   return (
     <Link href="/" className="flex items-center gap-2">

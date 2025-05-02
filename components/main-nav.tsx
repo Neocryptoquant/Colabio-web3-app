@@ -12,7 +12,7 @@ export function MainNav() {
   const { connected } = useWallet()
 
   return (
-    <header className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-black/50 backdrop-blur-sm">
+    <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Logo />
