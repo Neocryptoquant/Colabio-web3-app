@@ -38,7 +38,7 @@ export function WalletMultiButton() {
     return (
       <Button
         onClick={() => disconnect()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white h-12 font-medium"
+        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 h-12 font-medium rounded-md"
       >
         Disconnect
       </Button>
@@ -47,26 +47,26 @@ export function WalletMultiButton() {
 
   // Show wallet icon based on selected wallet
   const getWalletIcon = () => {
-    if (!wallet) return <Image src="/phantom-logo.svg" alt="Wallet" width={24} height={24} className="mr-2" />
+    if (!wallet) return <Image src="/phantom-logo.svg" alt="Wallet" width={24} height={24} className="mr-3" />
 
     if (wallet.adapter.name.toLowerCase().includes("phantom")) {
-      return <Image src="/phantom-logo.svg" alt="Phantom" width={24} height={24} className="mr-2" />
+      return <Image src="/phantom-logo.svg" alt="Phantom" width={24} height={24} className="mr-3" />
     } else if (wallet.adapter.name.toLowerCase().includes("solflare")) {
-      return <Image src="/solflare-logo.svg" alt="Solflare" width={24} height={24} className="mr-2" />
+      return <Image src="/solflare-logo.svg" alt="Solflare" width={24} height={24} className="mr-3" />
     }
 
-    return <Image src="/phantom-logo.svg" alt="Wallet" width={24} height={24} className="mr-2" />
+    return <Image src="/phantom-logo.svg" alt="Wallet" width={24} height={24} className="mr-3" />
   }
 
   return (
     <Button
       onClick={handleConnect}
       disabled={connecting || isConnecting}
-      className="w-full bg-green-600 hover:bg-green-700 text-white h-12 font-medium"
+      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 font-medium rounded-md"
     >
       {connecting || isConnecting ? (
         <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <Loader2 className="mr-3 h-4 w-4 animate-spin" />
           Connecting...
         </>
       ) : (
