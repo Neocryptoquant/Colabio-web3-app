@@ -38,7 +38,7 @@ export function WalletMultiButton() {
     return (
       <Button
         onClick={() => disconnect()}
-        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 font-medium"
+        className="w-full bg-green-600 hover:bg-green-700 text-white h-12 font-medium"
       >
         Disconnect
       </Button>
@@ -62,7 +62,7 @@ export function WalletMultiButton() {
     <Button
       onClick={handleConnect}
       disabled={connecting || isConnecting}
-      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 font-medium"
+      className="w-full bg-green-600 hover:bg-green-700 text-white h-12 font-medium"
     >
       {connecting || isConnecting ? (
         <>
